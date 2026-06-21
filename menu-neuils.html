@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Menu des Neuils</title>
+<style>
+/* --- 🎨 LE FOND PASTEL MAGIQUE --- */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%);
+    background-attachment: fixed;
+    color: #334155;
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+}
+
+.container { max-width: 850px; margin: 0 auto 30px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); text-align: center; }
+h1 { color: #1e293b; font-size: 1.8em; margin-bottom: 15px; }
+
+select, button { padding: 12px; font-size: 16px; border-radius: 8px; border: 1px solid #cbd5e1; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+.btn-gen { background-color: #3498db; color: white; width: 100%; font-weight: bold; border: none; box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2); }
+.btn-gen:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4); background-color: #2980b9; }
+
+.btn-print { background-color: #4b6584; color: white; border: none; padding: 15px 30px; font-size: 16px; margin: 0 10px; box-shadow: 0 4px 6px rgba(75, 101, 132, 0.2); }
+.btn-print:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(75, 101, 132, 0.4); background-color: #3d526b; }
+
+.btn-courses { background-color: #e67e22; color: white; border: none; padding: 15px 30px; font-size: 16px; margin: 0 10px; box-shadow: 0 4px 6px rgba(230, 126, 34, 0.2); }
+.btn-courses:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(230, 126, 34, 0.4); background-color: #d35400; }
+
+#shopping-list-container { border: 2px solid #27ae60; }
+.list-columns { display: flex; gap: 30px; margin-top: 20px; text-align: left; }
+.list-marche, .list-supermarche { flex: 1; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #eee; }
+.list-marche h3 { color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 5px; }
+.list-supermarche h3 { color: #3498db; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+ul[contenteditable="true"] { min-height: 100px; outline: none; padding-left: 20px; line-height: 1.8; }
+
+.btn-print-list { background-color: #27ae60; color: white; border: none; margin-top: 20px; padding: 12px 40px; font-weight: bold; box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2); }
+.btn-print-list:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(39, 174, 96, 0.4); background-color: #219a52; }
+
+.layout-principal { display: flex; justify-content: center; gap: 30px; max-width: 1200px; margin: 0 auto 20px auto; align-items: flex-start; }
+.print-zone { flex: 1; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: center; position: relative; }
+th { background-color: #1e293b; color: white; }
+.jour-col { font-weight: bold; background-color: #f1f5f9; width: 95px; }
+.col-repas { width: calc((100% - 95px) / 2); }
+
+.lunchbox-section { background: #e8f4f8; padding: 10px; border-radius: 8px; margin: 10px auto; max-width: 450px; }
+.checkbox-group { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.lunchbox-meal { margin-top: 5px; padding: 8px; background-color: #fffaf0; border: 1px dashed #e67e22; border-radius: 6px; font-size: 13px; color: #d35400; text-align: left; min-height: 20px; outline: none; transition: opacity 0.3s ease; }
+
+#carousel-container { max-width: 1200px; margin: 60px auto; overflow: hidden; background: white; padding: 25px 0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+#carousel-container h3 { text-align: center; color: #475569; font-size: 1.2em; margin-bottom: 20px; margin-top: 0; }
+.compteur-plats { font-size: 0.7em; color: #94a3b8; font-weight: normal; }
+.carousel-track { display: flex; white-space: nowrap; animation: defilement 120s linear infinite; overflow-x: auto; scrollbar-width: thin; cursor: grab; padding-bottom: 10px; }
+.carousel-track.paused { animation-play-state: paused; }
+.carousel-track.dragging { cursor: grabbing; scroll-behavior: auto; }
+.carousel-track::-webkit-scrollbar { height: 6px; }
+.carousel-track::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.suggestion-item { display: inline-block; background: #f59e0b; color: white; padding: 10px 22px; margin: 0 12px; border-radius: 25px; font-weight: 600; cursor: grab; font-size: 14px; flex-shrink: 0; }
+
+.add-meal-section { border: 2px dashed #3498db; background-color: #f0f9ff; padding: 30px !important; margin-top: 80px !important; }
+.add-meal-section h3 { font-size: 1.3em; color: #2980b9; margin-top: 0; margin-bottom: 20px; }
+.add-meal-section input[type="text"] { padding: 12px; width: 85%; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 16px; text-align: center; }
+.type-selector { margin: 20px 0; font-size: 15px; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+.btn-save { background-color: #27ae60; color: white; border: none; padding: 12px 40px; font-weight: bold; margin-top: 15px; box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2); }
+.btn-save:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(39, 174, 96, 0.4); background-color: #219a52; }
+
+.suggestion-check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; margin-top: 10px; }
+.suggestion-check-item { display: flex; align-items: center; gap: 10px; background: white; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; }
+.suggestion-check-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
+.suggestion-check-item label { cursor: pointer; flex: 1; }
+.badge-saison-s { font-size: 11px; padding: 2px 8px; border-radius: 10px; color: white; margin-left: 6px; }
+.bs-ete { background: #f59e0b; }
+.bs-hiver { background: #3b82f6; }
+.bs-toutes { background: #10b981; }
+
+.gestion-base { border: 2px dashed #8b5cf6; background-color: #faf5ff; padding: 30px !important; margin-top: 30px !important; }
+.gestion-base h3 { font-size: 1.3em; color: #7c3aed; margin-top: 0; margin-bottom: 10px; }
+.gestion-base p { font-size: 13px; color: #64748b; max-width: 550px; margin: 10px auto; }
+.gestion-base code { background: #ede9fe; padding: 2px 6px; border-radius: 4px; }
+.btn-violet { background-color: #8b5cf6; color: white; border: none; padding: 12px 30px; font-weight: bold; margin: 8px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.2); }
+.btn-violet:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(139, 92, 246, 0.4); background-color: #7c3aed; }
+.btn-rouge { background-color: #ef4444; color: white; border: none; padding: 12px 30px; font-weight: bold; margin: 8px; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2); }
+.btn-rouge:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(239, 68, 68, 0.4); background-color: #dc2626; }
+input[type="file"] { display: none; }
+.label-fichier { display: inline-block; }
+
+.table-plats { width: 100%; border-collapse: collapse; font-size: 14px; background: white; }
+.table-plats th, .table-plats td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; }
+.table-plats th { background-color: #ede9fe; color: #5b21b6; }
+.table-plats td.col-saison { text-align: center; width: 110px; }
+.table-plats td.col-action { text-align: center; width: 60px; }
+.badge-saison { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; color: white; }
+.badge-ete { background-color: #f59e0b; }
+.badge-hiver { background-color: #3b82f6; }
+.badge-toutes { background-color: #10b981; }
+.btn-suppr { background: none; border: none; color: #ef4444; font-size: 18px; cursor: pointer; padding: 0; }
+.btn-suppr:hover { transform: scale(1.2); }
+.table-plats input.edit-nom { width: 100%; border: none; background: transparent; font-size: 14px; font-family: inherit; padding: 4px; border-radius: 4px; }
+.table-plats input.edit-nom:focus { background: #f0f9ff; outline: 1px solid #3498db; }
+.table-plats select.edit-saison { font-size: 12px; padding: 4px; border-radius: 6px; border: 1px solid #cbd5e1; }
+
+.meal-cell { min-height: 60px; }
+.drag-handle { cursor: grab; float: left; opacity: 0.2; margin-right: 5px; transition: 0.2s; }
+.btn-relance { cursor: pointer; float: left; opacity: 0.2; margin-right: 8px; transition: 0.3s; font-size: 14px; }
+.meal-cell:hover .drag-handle, .meal-cell:hover .btn-relance { opacity: 1; }
+.btn-relance:hover { transform: rotate(180deg) scale(1.2); }
+
+.meal-content { display: inline-block; width: 75%; text-align: left; outline: none; transition: opacity 0.3s ease; }
+.drag-over { background-color: #e3f2fd !important; outline: 2px dashed #3498db; }
+
+@keyframes apparitionDouce {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+#affichage-menu h2,
+#affichage-menu table,
+#zone-actions,
+#carousel-container,
+#shopping-list-container {
+    animation: apparitionDouce 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes defilement { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+@media print {
+    .no-print { display: none !important; }
+    body { background: white !important; padding: 0; }
+    .container, .print-zone { box-shadow: none; border: none; width: 100%; max-width: 100%; margin: 0; padding: 0; }
+    #shopping-list-container { border: 1px solid #000; display: block !important; page-break-before: always; margin-top: 20px; padding: 20px; }
+    .list-marche, .list-supermarche { border: none; }
+    table { border: 1px solid black; }
+    th, td { border: 1px solid black; }
+    .drag-handle, .btn-relance { display: none !important; }
+}
+</style>
+</head>
+<body>
+    <div class="container no-print">
+        <h1>🍴 Le Menu des Neuils</h1>
+        <div class="controls">
+            <select id="saison-choisie">
+                <option value="ete">☀️ Menus d'Été</option>
+                <option value="hiver">❄️ Menus d'Hiver</option>
+            </select>
+            <div class="lunchbox-section">
+                <p>🍱 Jours de Lunchbox (Louise & Maman) :</p>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="lb-Samedi"> Sam</label>
+                    <label><input type="checkbox" id="lb-Dimanche"> Dim</label>
+                    <label><input type="checkbox" id="lb-Lundi"> Lun</label>
+                    <label><input type="checkbox" id="lb-Mardi"> Mar</label>
+                    <label><input type="checkbox" id="lb-Mercredi"> Mer</label>
+                    <label><input type="checkbox" id="lb-Jeudi"> Jeu</label>
+                    <label><input type="checkbox" id="lb-Vendredi"> Ven</label>
+                </div>
+            </div>
+            <button onclick="genererSemaine()" class="btn-gen">✨ Générer la semaine ✨</button>
+        </div>
+    </div>
+
+    <div class="layout-principal">
+        <div id="affichage-menu" class="print-zone"></div>
+    </div>
+
+    <div id="zone-actions" class="container no-print" style="display: none; background: none; box-shadow: none; margin-bottom: 20px;">
+        <button onclick="window.print()" class="btn-print">🖨️ Imprimer le menu</button>
+        <button onclick="genererCourses()" class="btn-courses">🛒 Faire ma liste de courses</button>
+    </div>
+
+    <div id="shopping-list-container" class="container" style="display: none;">
+        <h2 style="color: #27ae60;">🛒 Ma Liste de Courses</h2>
+        <p class="no-print" style="font-style: italic; color: #666;">(Tu peux cliquer dans la liste pour ajouter ou modifier des produits)</p>
+
+        <div class="list-columns">
+            <div class="list-marche">
+                <h3>🧺 Marché du Samedi</h3>
+                <ul id="liste-marche-items" contenteditable="true"></ul>
+            </div>
+            <div class="list-supermarche">
+                <h3>🏬 Supermarché</h3>
+                <ul id="liste-supermarche-items" contenteditable="true"></ul>
+            </div>
+        </div>
+
+        <button onclick="window.print()" class="btn-print-list no-print">🖨️ Imprimer uniquement la liste</button>
+    </div>
+
+    <div id="carousel-container" class="no-print" style="display: none;">
+        <h3>💡 Boîte à idées <span class="compteur-plats" id="compteur-plats"></span></h3>
+        <div class="carousel-track" id="carousel-track"></div>
+    </div>
+
+    <div class="container no-print add-meal-section">
+        <h3>➕ Ajouter une nouvelle idée à la base</h3>
+        <input type="text" id="nouvelle-idee-input" placeholder="Taper le nom du plat...">
+        <div class="type-selector">
+            <label><input type="radio" name="saison-ajout" value="toutes" checked> 🌍 Été &amp; Hiver</label>
+            <label><input type="radio" name="saison-ajout" value="ete"> ☀️ Été uniquement</label>
+            <label><input type="radio" name="saison-ajout" value="hiver"> ❄️ Hiver uniquement</label>
+        </div>
+        <button onclick="ajouterIdee()" class="btn-save">💾 Ajouter le plat</button>
+        <br><br>
+        <button onclick="genererSuggestions()" class="btn-courses" style="margin-top:10px;" id="btn-ia-suggestions">🎲 Proposer des idées de plats</button>
+        <div id="suggestions-container" style="display:none; margin-top:20px; text-align:left;">
+            <div id="suggestions-resultat">
+                <p style="color:#475569; font-size:14px;">Coche les plats que tu veux ajouter à ta base, puis clique sur "Ajouter les cochés" :</p>
+                <div id="suggestions-liste"></div>
+                <button onclick="validerSuggestions()" class="btn-save" style="margin-top:15px;">✅ Ajouter les plats cochés</button>
+                <button onclick="genererSuggestions()" class="btn-courses" style="margin-top:15px; margin-left:10px;">🔄 Nouvelles idées</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container no-print gestion-base">
+        <h3>📚 Base de plats <span class="compteur-plats" id="compteur-plats-2"></span></h3>
+
+        <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:10px; padding:16px; margin-bottom:16px; text-align:left; font-size:14px;">
+            <b>💡 Comment fonctionne la sauvegarde ?</b><br><br>
+            Quand tu ajoutes ou modifies un plat, c'est enregistré <b>dans ce navigateur</b> (mémoire locale). C'est rapide, mais fragile : si tu vides le cache ou ouvres l'outil sur un autre appareil, les ajouts disparaissent.<br><br>
+            <b>Pour ne rien perdre, tu as 3 options :</b>
+            <ol style="margin:8px 0 0 0; padding-left:20px; line-height:2;">
+                <li><b>Sauvegarde automatique JSON</b> — à chaque ajout, un fichier <code>base-plats-neuils-backup.json</code> est téléchargé dans tes Téléchargements. Garde le dernier.</li>
+                <li><b>Dossier OneDrive</b> — configure un dossier ci-dessous, la sauvegarde s'y écrit directement (Chrome/Edge PC uniquement). OneDrive synchronise ensuite.</li>
+                <li>✅ <b>La vraie solution durable : "Sauvegarder dans l'outil"</b> — génère un nouveau <code>index.html</code> avec tes plats gravés dedans. Remplace le fichier sur GitHub → permanant sur tous les appareils, pour tout le monde.</li>
+            </ol>
+        </div>
+
+        <p id="statut-dossier" style="font-weight:600;"></p>
+        <button onclick="choisirDossierSauvegarde()" class="btn-violet" id="btn-dossier">📁 Dossier OneDrive (sauvegarde auto)</button>
+        <p style="font-size:12px; color:#64748b;">Chrome/Edge PC uniquement. Le dossier choisi est mémorisé, pas besoin de le resélectionner à chaque fois.</p>
+
+        <label class="label-fichier">
+            <input type="file" id="fichier-import" accept=".json" onchange="importerBase(event)">
+            <button type="button" class="btn-violet" onclick="document.getElementById('fichier-import').click()">⬆️ Importer une base (JSON)</button>
+        </label>
+        <button onclick="exporterBase()" class="btn-violet">⬇️ Exporter ma base (JSON)</button>
+        <br><br>
+        <button onclick="sauvegarderDansOutil()" style="background:#e74c3c; color:white; border:none; padding:14px 30px; font-weight:bold; border-radius:8px; font-size:15px; cursor:pointer; box-shadow:0 4px 6px rgba(231,76,60,0.3);">
+            💾 Sauvegarder définitivement dans l'outil (GitHub)
+        </button>
+        <p style="font-size:12px; color:#64748b; max-width:550px; margin:8px auto 0;">
+            Génère un <code>index.html</code> avec tous tes plats gravés dans le code. À uploader sur GitHub.
+        </p>
+        <br>
+        <button onclick="toggleListePlats()" class="btn-violet" id="btn-toggle-liste">👀 Voir / gérer la liste des plats</button>
+        <button onclick="reinitialiserBase()" class="btn-rouge">♻️ Réinitialiser à la base d'origine</button>
+        <p style="font-size:12px; color:#64748b;">
+            Import JSON : liste d'objets <code>{"nom": "...", "saison": "ete|hiver|toutes"}</code>. L'import <b>remplace</b> la base actuelle.
+        </p>
+        <div id="liste-plats-container" style="display:none; text-align:left; margin-top:20px;">
+            <input type="text" id="filtre-plats" placeholder="🔎 Filtrer les plats..." oninput="afficherListePlats()" style="width:90%; margin-bottom:15px; padding:10px; border-radius:8px; border:1px solid #cbd5e1;">
+            <div id="liste-plats-table"></div>
+        </div>
+    </div>
+
+<script>
+let elementAttrape = null;
+
+const CLE_STOCKAGE = "menuNeuils_platsBase";
+
+// --- 📚 BASE DE PLATS PAR DÉFAUT (importée de Liste_plats.xlsx) ---
+const PLATS_DEFAUT = [
+    {
+        "nom": "Apéro : croissants knakis, gougères, saucisson Ail, Paté, Fromage, cake pp, blini, …",
+        "saison": "toutes"
+    },
+    {
+        "nom": "BBQ",
+        "saison": "ete"
+    },
+    {
+        "nom": "blé, dinde",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Boudin pommes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "brocolis / blé",
+        "saison": "hiver"
+    },
+    {
+        "nom": "Brocolis / p de t",
+        "saison": "hiver"
+    },
+    {
+        "nom": "carottes / jambon / taboulé",
+        "saison": "ete"
+    },
+    {
+        "nom": "carottes râpées, macédoine, jambon",
+        "saison": "ete"
+    },
+    {
+        "nom": "choux de bruxelles, p de t, saucisses",
+        "saison": "hiver"
+    },
+    {
+        "nom": "coleslaw crevettes",
+        "saison": "ete"
+    },
+    {
+        "nom": "concombe, tomates, carottes râpées,œufs durs,piémontaise, macédoine",
+        "saison": "ete"
+    },
+    {
+        "nom": "cordons bleus",
+        "saison": "toutes"
+    },
+    {
+        "nom": "cuisses de canard",
+        "saison": "toutes"
+    },
+    {
+        "nom": "curry de crevettes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "curry de légumes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "curry de porc",
+        "saison": "toutes"
+    },
+    {
+        "nom": "curry de poulet",
+        "saison": "toutes"
+    },
+    {
+        "nom": "endives au jambon",
+        "saison": "hiver"
+    },
+    {
+        "nom": "Endives cuites",
+        "saison": "hiver"
+    },
+    {
+        "nom": "épinards",
+        "saison": "hiver"
+    },
+    {
+        "nom": "escalope de dinde, blé",
+        "saison": "toutes"
+    },
+    {
+        "nom": "fajitas",
+        "saison": "toutes"
+    },
+    {
+        "nom": "galettes bretonnes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "galettes végé",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Gnocchi",
+        "saison": "toutes"
+    },
+    {
+        "nom": "gratin de chou fleur",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de courgettes",
+        "saison": "ete"
+    },
+    {
+        "nom": "gratin de légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "hachis parmentier",
+        "saison": "toutes"
+    },
+    {
+        "nom": "jambon, carotte rapées, céleri rémoulade, taboulé, macédoine",
+        "saison": "ete"
+    },
+    {
+        "nom": "jardinière légumes",
+        "saison": "ete"
+    },
+    {
+        "nom": "Knacks",
+        "saison": "toutes"
+    },
+    {
+        "nom": "lasagnes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "lasagnes au saumon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "lasagnes aux poireaux",
+        "saison": "hiver"
+    },
+    {
+        "nom": "maquereaux",
+        "saison": "toutes"
+    },
+    {
+        "nom": "nouilles chinoises",
+        "saison": "toutes"
+    },
+    {
+        "nom": "nuggets",
+        "saison": "toutes"
+    },
+    {
+        "nom": "œufs à la coque",
+        "saison": "toutes"
+    },
+    {
+        "nom": "œufs au plat",
+        "saison": "toutes"
+    },
+    {
+        "nom": "p de t , carottes, navets",
+        "saison": "toutes"
+    },
+    {
+        "nom": "p de t sautées / omelette",
+        "saison": "toutes"
+    },
+    {
+        "nom": "p de t, haricots verts",
+        "saison": "ete"
+    },
+    {
+        "nom": "pâtes / fondue de poireaux",
+        "saison": "hiver"
+    },
+    {
+        "nom": "pâtes au gruyère",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes au thon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes bolo",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes carbo",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes chorizo",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Pâtes jambon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes pesto/escalopes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes sauce champignons",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes sauce tomate",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes saumon fumé",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Pâtes, jambon de dinde",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes, poisson pané",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Pommes rissolées",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet aux poivrons / riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet frites",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet tikka / riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "purée asiatique",
+        "saison": "hiver"
+    },
+    {
+        "nom": "Purée mousseline / jambon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Purée patate douce",
+        "saison": "toutes"
+    },
+    {
+        "nom": "quiche lorraines",
+        "saison": "toutes"
+    },
+    {
+        "nom": "quiches chorizo",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Raclette",
+        "saison": "hiver"
+    },
+    {
+        "nom": "ratatouille semoule",
+        "saison": "ete"
+    },
+    {
+        "nom": "raviolis",
+        "saison": "toutes"
+    },
+    {
+        "nom": "risotto à la viande hachée",
+        "saison": "toutes"
+    },
+    {
+        "nom": "risotto champignons",
+        "saison": "toutes"
+    },
+    {
+        "nom": "risotto crevettes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "risotto poireaux",
+        "saison": "hiver"
+    },
+    {
+        "nom": "riz / hv",
+        "saison": "toutes"
+    },
+    {
+        "nom": "riz cantonnais",
+        "saison": "toutes"
+    },
+    {
+        "nom": "Riz saumon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "rougail de saucisses",
+        "saison": "toutes"
+    },
+    {
+        "nom": "salade césar",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade composée (émincé de poulet, emmental, tomates cerises, œufs durs)",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade composée (thon, emmental, maïs, croutons)",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de blé",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de boulgour",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de chèvre chaud",
+        "saison": "toutes"
+    },
+    {
+        "nom": "salade de haricots verts",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de lentilles",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de p de t ,thon",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de p de t, maquereaux",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de pâtes",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de pois cassés",
+        "saison": "hiver"
+    },
+    {
+        "nom": "salade de quinoa crevettes",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de riz",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de saumon",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade périgourdine",
+        "saison": "toutes"
+    },
+    {
+        "nom": "saumon pdt",
+        "saison": "ete"
+    },
+    {
+        "nom": "Semoule cassegrain",
+        "saison": "toutes"
+    },
+    {
+        "nom": "soupe butternut",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de carottes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de courgettes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de légumes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de poireaux",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tacos maison",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tagliatelles aux crevettes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tarte au thon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tartes au chorizo",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tartes au fromage",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tartes aux épinards",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tartes aux oignons",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tartiflette",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tomates et poivrons farcis",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tomates mozza",
+        "saison": "ete"
+    },
+    {
+        "nom": "wraps au saumon",
+        "saison": "ete"
+    },
+    {
+        "nom": "wraps au thon",
+        "saison": "ete"
+    },
+    { "nom": "poulet rôti / pommes de terre", "saison": "toutes" },
+    { "nom": "saumon papillote / riz", "saison": "toutes" },
+    { "nom": "poêlée de légumes / œufs", "saison": "toutes" },
+    { "nom": "croque-monsieur / salade", "saison": "toutes" },
+    { "nom": "soupe poireaux / pommes de terre", "saison": "hiver" },
+    { "nom": "velouté potiron / pain grillé", "saison": "hiver" },
+    { "nom": "omelette aux champignons", "saison": "toutes" },
+    { "nom": "omelette jambon / fromage", "saison": "toutes" },
+    { "nom": "omelette courgettes", "saison": "ete" },
+    { "nom": "escalope panée / haricots verts", "saison": "toutes" },
+    { "nom": "steak haché / frites", "saison": "toutes" },
+    { "nom": "steak haché / pommes de terre sautées", "saison": "toutes" },
+    { "nom": "filet de cabillaud / riz", "saison": "toutes" },
+    { "nom": "filet de cabillaud / purée", "saison": "toutes" },
+    { "nom": "colin / carottes", "saison": "toutes" },
+    { "nom": "lieu noir / brocolis", "saison": "toutes" },
+    { "nom": "sauté de porc / pommes de terre", "saison": "hiver" },
+    { "nom": "blanquette de veau / riz", "saison": "hiver" },
+    { "nom": "bœuf bourguignon / pâtes", "saison": "hiver" },
+    { "nom": "poulet basquaise / riz", "saison": "toutes" },
+    { "nom": "poulet moutarde / pâtes", "saison": "toutes" },
+    { "nom": "poulet citron / couscous", "saison": "ete" },
+    { "nom": "dinde aux olives / riz", "saison": "toutes" },
+    { "nom": "porc au lait de coco / riz", "saison": "toutes" },
+    { "nom": "porc caramel / nouilles", "saison": "toutes" },
+    { "nom": "wok de légumes / poulet", "saison": "toutes" },
+    { "nom": "wok de légumes / crevettes", "saison": "toutes" },
+    { "nom": "pizza maison", "saison": "toutes" },
+    { "nom": "quiche saumon / épinards", "saison": "toutes" },
+    { "nom": "tarte poireaux / chèvre", "saison": "hiver" },
+    { "nom": "tarte courgettes / feta", "saison": "ete" },
+    { "nom": "gratin dauphinois / jambon", "saison": "hiver" },
+    { "nom": "gratin de pâtes / jambon", "saison": "toutes" },
+    { "nom": "taboulé / brochettes", "saison": "ete" },
+    { "nom": "salade niçoise", "saison": "ete" },
+    { "nom": "gaspacho / toast fromage", "saison": "ete" },
+    { "nom": "panzanella / mozzarella", "saison": "ete" },
+    { "nom": "courgettes farcies / riz", "saison": "ete" },
+    { "nom": "poivrons farcis / semoule", "saison": "ete" },
+    { "nom": "spaghetti aux palourdes", "saison": "toutes" },
+    { "nom": "penne à l'arrabbiata", "saison": "toutes" },
+    { "nom": "coquillettes jambon / emmental", "saison": "toutes" },
+    { "nom": "gnocchi sauce tomate / basilic", "saison": "toutes" },
+    { "nom": "risotto betterave / chèvre", "saison": "hiver" },
+    { "nom": "lentilles / saucisses", "saison": "hiver" },
+    { "nom": "cassoulet maison", "saison": "hiver" },
+    { "nom": "pot-au-feu", "saison": "hiver" },
+    { "nom": "aligot / saucisse", "saison": "hiver" },
+    { "nom": "Welsh rarebit / salade", "saison": "toutes" },
+    { "nom": "burger maison", "saison": "toutes" },
+    { "nom": "hot-dogs maison", "saison": "toutes" },
+    { "nom": "nems / riz cantonnais", "saison": "toutes" },
+    { "nom": "bo bun", "saison": "toutes" },
+    { "nom": "pad thaï", "saison": "toutes" }
+];
+
+// --- 🗂️ Dictionnaire pour la liste de courses (avec comptage) ---
+// Chaque règle : mots-clés déclencheurs, ingrédients Marché, ingrédients Supermarché
+// Le comptage se fait en comptant combien de plats de la semaine contiennent chaque mot-clé
+const REGLES_COURSES = [
+    // 🥩 VIANDES FRAÎCHES → Marché
+    { mots: ["poulet rôti", "poulet frit", "poulet basquaise", "poulet moutard", "poulet citron", "poulet tikka", "poulet aux poivron", "salade césar", "salade composée (émincé"], marche: ["Filets / cuisse de poulet"], super: [] },
+    { mots: ["escalope de dinde", "blé, dinde", "dinde aux olives", "dinde"], marche: ["Escalopes de dinde"], super: [] },
+    { mots: ["steak haché", "hachis parmentier", "bolo", "farci", "risotto à la viande", "tomates et poivrons farcis", "courgettes farcies", "poivrons farcis"], marche: ["Viande hachée"], super: [] },
+    { mots: ["canard"], marche: ["Cuisses de canard"], super: [] },
+    { mots: ["paupiette"], marche: ["Paupiettes"], super: [] },
+    { mots: ["blanquette"], marche: ["Veau (blanquette)"], super: [] },
+    { mots: ["bœuf bourguignon", "pot-au-feu"], marche: ["Bœuf (bourguignon/pot-au-feu)"], super: [] },
+    { mots: ["sauté de porc", "porc au lait", "porc caramel", "aligot / saucisse", "cassoulet"], marche: ["Porc (sauté)"], super: [] },
+    { mots: ["brochettes", "bbq"], marche: ["Viande à brochettes / BBQ"], super: [] },
+    // 🐟 POISSONS FRAIS → Marché
+    { mots: ["saumon pdt", "saumon papillote", "riz saumon", "lasagnes au saumon", "pâtes saumon", "wraps au saumon", "salade de saumon"], marche: ["Saumon frais"], super: [] },
+    { mots: ["cabillaud"], marche: ["Filet de cabillaud"], super: [] },
+    { mots: ["colin"], marche: ["Colin"], super: [] },
+    { mots: ["lieu"], marche: ["Lieu noir"], super: [] },
+    // 🦐 FRUITS DE MER → Marché
+    { mots: ["crevette", "coleslaw crevettes", "curry de crevettes", "risotto crevettes", "salade de quinoa crevettes", "tagliatelles aux crevettes", "wok de légumes / crevettes"], marche: ["Crevettes"], super: [] },
+    { mots: ["palourde"], marche: ["Palourdes"], super: [] },
+    // 🥦 LÉGUMES FRAIS → Marché
+    { mots: ["tomate", "salade composée", "salade niçoise", "panzanella", "gaspacho"], marche: ["Tomates"], super: [] },
+    { mots: ["carotte", "jardinière", "pot-au-feu", "p de t , carottes, navets"], marche: ["Carottes"], super: [] },
+    { mots: ["courgette", "ratatouille", "jardinière"], marche: ["Courgettes"], super: [] },
+    { mots: ["champignon", "omelette aux champignons", "risotto champignons", "pâtes sauce champignons"], marche: ["Champignons de Paris"], super: [] },
+    { mots: ["haricot vert", "hv", "salade de haricots", "riz / hv", "p de t, haricots verts", "escalope panée / haricots", "salade niçoise"], marche: ["Haricots verts"], super: [] },
+    { mots: ["salade", "coleslaw", "salade césar", "salade niçoise"], marche: ["Salade / Mâche"], super: [] },
+    { mots: ["concombre"], marche: ["Concombre"], super: [] },
+    { mots: ["p de t", "pdt", "patate", "rissolée", "gratin dauphinois", "hachis parmentier", "saumon pdt", "purée patate", "steak haché / frites"], marche: ["Pommes de terre"], super: [] },
+    { mots: ["chou fleur", "gratin de chou fleur"], marche: ["Chou-fleur"], super: [] },
+    { mots: ["choux de bruxelles"], marche: ["Choux de Bruxelles"], super: [] },
+    { mots: ["navet", "pot-au-feu", "p de t , carottes, navets"], marche: ["Navets"], super: [] },
+    { mots: ["brocoli", "lieu noir / brocolis"], marche: ["Brocolis"], super: [] },
+    { mots: ["endive"], marche: ["Endives"], super: [] },
+    { mots: ["poivron", "ratatouille", "poulet aux poivrons", "poulet basquaise", "fajitas", "tacos"], marche: ["Poivrons"], super: [] },
+    { mots: ["potiron", "butternut", "soupe butternut", "velouté potiron"], marche: ["Potiron / Butternut"], super: [] },
+    { mots: ["oignon", "tarte aux oignons", "soupe"], marche: ["Oignons"], super: [] },
+    { mots: ["poireau", "fondue de poireaux", "lasagnes aux poireaux", "risotto poireaux", "soupe de poireaux", "tarte poireaux"], marche: ["Poireaux"], super: [] },
+    { mots: ["céleri", "jambon, carotte rapées, céleri"], marche: ["Céleri rémoulade"], super: [] },
+    { mots: ["épinard", "tartes aux épinards", "quiche saumon / épinards"], marche: ["Épinards"], super: [] },
+    { mots: ["betterave", "risotto betterave"], marche: ["Betteraves"], super: [] },
+    { mots: ["courgette farcies", "ratatouille semoule", "jardinière"], marche: ["Aubergines / courgettes"], super: [] },
+    // 🏪 ÉPICERIE / SURGELÉS → Supermarché
+    { mots: ["jambon", "croque-monsieur", "endives au jambon", "pâtes jambon", "purée mousseline / jambon", "gratin de pâtes / jambon", "coquillettes jambon"], super: ["Jambon blanc"], marche: [] },
+    { mots: ["knack", "knaki"], super: ["Saucisses Knacks"], marche: [] },
+    { mots: ["saucisse", "rougail", "lentilles / saucisses", "choux de bruxelles, p de t, saucisses", "aligot / saucisse"], super: ["Saucisses"], marche: [] },
+    { mots: ["hot-dog"], super: ["Saucisses hot-dog + pains"], marche: [] },
+    { mots: ["cordon bleu"], super: ["Cordons bleus"], marche: [] },
+    { mots: ["chorizo", "pâtes chorizo", "quiches chorizo", "tartes au chorizo"], super: ["Chorizo"], marche: [] },
+    { mots: ["lardon", "carbo", "tartiflette", "quiche lorraine"], super: ["Lardons"], marche: [] },
+    { mots: ["bacon"], super: ["Bacon"], marche: [] },
+    { mots: ["saucisson"], super: ["Saucisson sec"], marche: [] },
+    { mots: ["paté", "pâté", "apéro"], super: ["Pâté"], marche: [] },
+    { mots: ["nuggets"], super: ["Nuggets de poulet"], marche: [] },
+    { mots: ["boudin"], super: ["Boudins noirs/blancs"], marche: [] },
+    { mots: ["poisson pané"], super: ["Poisson pané"], marche: [] },
+    { mots: ["galette végé", "steak végé"], super: ["Steaks / Galettes végétales"], marche: [] },
+    { mots: ["nem"], super: ["Nems (surgelés)"], marche: [] },
+    { mots: ["pâtes", "bolo", "carbo", "spaghetti", "tagliatelle", "lasagne", "penne", "coquillette", "macaroni", "fondue de poireaux"], super: ["Pâtes sèches"], marche: [] },
+    { mots: ["lasagne"], super: ["Plaques à lasagnes"], marche: [] },
+    { mots: ["riz", "risotto", "cantonnais", "rougail", "curry", "wok", "pad thaï", "bo bun"], super: ["Riz"], marche: [] },
+    { mots: ["semoule", "couscous", "taboulé", "ratatouille semoule", "cassegrain", "poivrons farcis / semoule"], super: ["Semoule"], marche: [] },
+    { mots: ["blé", "ebly", "boulgour", "blé, dinde", "salade de blé", "escalope de dinde, blé", "brocolis / blé"], super: ["Ebly / Blé"], marche: [] },
+    { mots: ["quinoa", "salade de quinoa"], super: ["Quinoa"], marche: [] },
+    { mots: ["lentille", "salade de lentilles", "lentilles / saucisses"], super: ["Lentilles"], marche: [] },
+    { mots: ["pois cassé", "salade de pois cassés"], super: ["Pois cassés"], marche: [] },
+    { mots: ["ravioli"], super: ["Raviolis en boîte"], marche: [] },
+    { mots: ["gnocchi"], super: ["Gnocchis frais"], marche: [] },
+    { mots: ["purée", "mousseline", "hachis parmentier", "cabillaud / purée"], super: ["Purée Mousseline"], marche: [] },
+    { mots: ["frites", "steak haché / frites", "poulet frites"], super: ["Frites surgelées"], marche: [] },
+    { mots: ["galette bretonne"], super: ["Galettes de sarrasin"], marche: [] },
+    { mots: ["croque", "toast", "hot-dog", "burger"], super: ["Pain de mie / Pains burger"], marche: [] },
+    { mots: ["blini", "apéro"], super: ["Blinis"], marche: [] },
+    { mots: ["mozza", "tomates mozza", "panzanella"], super: ["Mozzarella"], marche: [] },
+    { mots: ["emmental", "gruyère", "fromage", "raclette", "welsh", "croque", "salade composée (émincé de poulet, emmental"], super: ["Emmental / Gruyère râpé"], marche: [] },
+    { mots: ["raclette"], super: ["Fromages à raclette"], marche: [] },
+    { mots: ["boursin"], super: ["Boursin"], marche: [] },
+    { mots: ["chèvre", "salade de chèvre", "tarte poireaux / chèvre", "tarte courgettes / feta", "risotto betterave / chèvre"], super: ["Fromage de chèvre / Feta"], marche: [] },
+    { mots: ["ricotta", "gnocchi sauce tomate"], super: ["Ricotta"], marche: [] },
+    { mots: ["crème", "gratin", "quiche", "tarte", "carbo", "tartiflette", "blanquette", "velouté", "soupe"], super: ["Crème fraîche"], marche: [] },
+    { mots: ["œuf", "oeuf", "omelette", "quiche", "tarte", "hachis parmentier", "salade niçoise", "p de t sautées / omelette", "poêlée de légumes / œufs"], super: ["Œufs"], marche: [] },
+    { mots: ["tarte", "quiche", "pizza"], super: ["Pâte brisée / feuilletée"], marche: [] },
+    { mots: ["pizza maison"], super: ["Pâte à pizza"], marche: [] },
+    { mots: ["croissant", "gougère", "apéro"], super: ["Pâte à croissants / Gougères"], marche: [] },
+    { mots: ["thon", "pâtes au thon", "salade composée (thon", "salade de p de t ,thon", "tarte au thon", "wraps au thon", "salade niçoise"], super: ["Thon en boîte"], marche: [] },
+    { mots: ["maquereau", "salade de p de t, maquereaux"], super: ["Maquereaux en boîte"], marche: [] },
+    { mots: ["macédoine", "piémontaise"], super: ["Macédoine / Piémontaise"], marche: [] },
+    { mots: ["cassegrain", "semoule cassegrain"], super: ["Cassegrain"], marche: [] },
+    { mots: ["wraps", "tortillas", "fajitas", "tacos", "bo bun"], super: ["Wraps / Tortillas"], marche: [] },
+    { mots: ["maïs", "salade composée (thon, emmental, maïs"], super: ["Maïs en boîte"], marche: [] },
+    { mots: ["curry"], super: ["Pâte / Sauce curry"], marche: [] },
+    { mots: ["lait de coco", "porc au lait de coco", "curry"], super: ["Lait de coco"], marche: [] },
+    { mots: ["pesto"], super: ["Pesto"], marche: [] },
+    { mots: ["saumon fumé", "pâtes saumon fumé", "galettes bretonnes"], super: ["Saumon fumé"], marche: [] },
+    { mots: ["aligot"], super: ["Fromage à aligot (tome fraîche)"], marche: [] },
+    { mots: ["taboulé", "carottes / jambon / taboulé", "jambon, carotte rapées, céleri rémoulade, taboulé"], super: ["Taboulé tout prêt"], marche: [] }
+];
+
+// --- 💾 Gestion de la base (localStorage) ---
+function getPlatsBase() {
+    try {
+        const stockee = localStorage.getItem(CLE_STOCKAGE);
+        if (stockee) {
+            const data = JSON.parse(stockee);
+            // Vérifie que c'est bien un tableau non vide d'objets valides
+            if (Array.isArray(data) && data.length > 0 && data.every(p => p && typeof p.nom === "string")) {
+                return data;
+            }
+        }
+    } catch (e) {}
+    // Données absentes ou corrompues : on repart de la base par défaut
+    return PLATS_DEFAUT;
+}
+
+function setPlatsBase(liste) {
+    localStorage.setItem(CLE_STOCKAGE, JSON.stringify(liste));
+}
+
+function majCompteurs() {
+    const n = getPlatsBase().length;
+    document.getElementById("compteur-plats").innerText = "(" + n + " plats au total)";
+    document.getElementById("compteur-plats-2").innerText = "(" + n + " plats)";
+}
+
+// --- 🎲 Tirage mélangé ---
+function melanger(array) {
+    const copie = [...array];
+    for (let i = copie.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copie[i], copie[j]] = [copie[j], copie[i]];
+    }
+    return copie;
+}
+
+function piocherPlats(pool, n) {
+    let resultat = [];
+    let reserve = melanger(pool);
+    while (resultat.length < n) {
+        if (reserve.length === 0) reserve = melanger(pool);
+        resultat.push(reserve.pop());
+    }
+    return resultat;
+}
+
+// --- 📅 GÉNÉRATION DE LA SEMAINE ---
+function genererSemaine() {
+  try {
+    const saison = document.getElementById("saison-choisie").value;
+    const pool = getPlatsBase().filter(p => p.saison === saison || p.saison === "toutes");
+
+    if (pool.length === 0) {
+        alert("La base de plats est vide pour cette saison !");
+        return;
+    }
+
+    const jours = ["Samedi", "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+    const tirage = piocherPlats(pool, jours.length * 2);
+
+    const lbCoches = {};
+    jours.forEach(j => { lbCoches[j] = document.getElementById("lb-" + j).checked; });
+
+    let html = `<h2 style="text-align: center;">📅 Semaine du ${dateDuLundi()}</h2>`;
+    html += `<table><thead><tr><th class="jour-col">Jour</th><th class="col-repas">Midi</th><th class="col-repas">Soir</th></tr></thead><tbody>`;
+
+    jours.forEach((jour, index) => {
+        const plMidi = tirage[index * 2].nom;
+        const plSoir = tirage[index * 2 + 1].nom;
+
+        const boolMidi = lbCoches[jour];
+
+        const caseMidiLunchbox = boolMidi ? `<div class="lunchbox-meal" contenteditable="true">🥪 Lunchbox...</div>` : "";
+
+        html += `<tr><td class="jour-col">${jour}</td>
+                 <td class="meal-cell col-repas" draggable="true">
+                    <span class="drag-handle" title="Glisser pour échanger">↕️</span>
+                    <span class="btn-relance" title="Changer ce plat" onclick="relancerPlat(this)" onmousedown="event.stopPropagation()">🎲</span>
+                    <div class="meal-content" contenteditable="true">${plMidi}</div>
+                    ${caseMidiLunchbox}
+                 </td>
+                 <td class="meal-cell col-repas" draggable="true">
+                    <span class="drag-handle" title="Glisser pour échanger">↕️</span>
+                    <span class="btn-relance" title="Changer ce plat" onclick="relancerPlat(this)" onmousedown="event.stopPropagation()">🎲</span>
+                    <div class="meal-content" contenteditable="true">${plSoir}</div>
+                 </td></tr>`;
+    });
+    html += `</tbody></table>`;
+
+    document.getElementById("affichage-menu").innerHTML = html;
+    document.getElementById("zone-actions").style.display = "block";
+    document.getElementById("carousel-container").style.display = "block";
+    document.getElementById("shopping-list-container").style.display = "none";
+
+    genererCarousel();
+    activerDragAndDrop();
+  } catch (err) {
+    alert("Une erreur est survenue lors de la génération : " + err.message);
+    console.error(err);
+  }
+}
+
+function dateDuLundi() {
+    const d = new Date();
+    const jourSemaine = d.getDay();
+    const decalage = jourSemaine === 0 ? -6 : 1 - jourSemaine;
+    d.setDate(d.getDate() + decalage);
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
+}
+
+function relancerPlat(boutonDe) {
+    const saison = document.getElementById("saison-choisie").value;
+    const pool = getPlatsBase().filter(p => p.saison === saison || p.saison === "toutes");
+    if (pool.length === 0) return;
+
+    const platTire = pool[Math.floor(Math.random() * pool.length)].nom;
+    const cellule = boutonDe.closest('.meal-cell');
+    const contenu = cellule.querySelector('.meal-content');
+
+    contenu.style.opacity = 0;
+    setTimeout(() => {
+        contenu.innerText = platTire;
+        contenu.style.opacity = 1;
+    }, 200);
+}
+
+// --- 🛒 LISTE DE COURSES ---
+function normaliser(texte) {
+    return texte.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // enlève les accents
+        .replace(/œ/g, "oe")
+        .replace(/[^\w\s]/g, " ");
+}
+
+function compterOccurrences(mots, plats) {
+    // Compte combien de plats (parmi les 14 de la semaine) contiennent au moins un des mots-clés
+    let count = 0;
+    plats.forEach(texte => {
+        const t = normaliser(texte);
+        const trouve = mots.some(mot => {
+            const m = normaliser(mot);
+            return t.includes(m);
+        });
+        if (trouve) count++;
+    });
+    return count;
+}
+
+function genererCourses() {
+    // Récupère tous les plats affichés (midi + soir des 7 jours)
+    const platsAffichés = [];
+    document.querySelectorAll('.meal-content').forEach(div => {
+        const t = div.innerText.trim();
+        if (t) platsAffichés.push(t);
+    });
+    document.querySelectorAll('.lunchbox-meal').forEach(div => {
+        const t = div.innerText.trim();
+        if (t && !t.startsWith("🥪")) platsAffichés.push(t);
+    });
+
+    const listeMarche = [];
+    const listeSuper  = [];
+
+    REGLES_COURSES.forEach(regle => {
+        const count = compterOccurrences(regle.mots, platsAffichés);
+        if (count === 0) return;
+        const suffixe = count >= 2 ? ` <b style="color:#e74c3c">×${count}</b>` : "";
+        regle.marche.forEach(ing => listeMarche.push(ing + suffixe));
+        regle.super.forEach(ing =>  listeSuper.push(ing + suffixe));
+    });
+
+    // Ligne vide ajoutée pour édition manuelle
+    const toHtml = liste => liste.map(i => `<li>${i}</li>`).join("") + "<li></li>";
+
+    document.getElementById("liste-marche-items").innerHTML = toHtml(listeMarche);
+    document.getElementById("liste-supermarche-items").innerHTML = toHtml(listeSuper);
+
+    document.getElementById("shopping-list-container").style.display = "block";
+    document.getElementById("shopping-list-container").scrollIntoView({ behavior: 'smooth' });
+}
+
+// --- ➕ AJOUT D'UNE IDÉE ---
+function ajouterIdee() {
+    const input = document.getElementById("nouvelle-idee-input");
+    const saison = document.querySelector('input[name="saison-ajout"]:checked').value;
+    const valeur = input.value.trim();
+
+    if (valeur !== "") {
+        const base = getPlatsBase();
+        base.push({ nom: valeur, saison: saison });
+        setPlatsBase(base);
+        input.value = "";
+        majCompteurs();
+        genererCarousel();
+        afficherListePlats();
+        sauvegardeAuto();
+    }
+}
+
+// --- ⬇️⬆️ EXPORT / IMPORT / RESET DE LA BASE ---
+function telechargerJSON(contenu, nomFichier) {
+    const blob = new Blob([contenu], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nomFichier;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function exporterBase() {
+    telechargerJSON(JSON.stringify(getPlatsBase(), null, 4), "base-plats-neuils.json");
+}
+
+async function sauvegarderDansOutil() {
+    const platsActuels = getPlatsBase();
+    const nb = platsActuels.length;
+
+    if (!confirm(`Tu vas générer un index.html avec ${nb} plats intégrés dans le code.\n\nIl faudra ensuite remplacer le fichier sur GitHub pour le rendre permanent.\n\nContinuer ?`)) return;
+
+    // Récupère le HTML source de la page courante
+    let source = document.documentElement.outerHTML;
+
+    // Remplace le bloc PLATS_DEFAUT par la liste actuelle
+    const nouveauBloc = "const PLATS_DEFAUT = " + JSON.stringify(platsActuels, null, 4) + ";";
+    source = source.replace(/const PLATS_DEFAUT = \[[\s\S]*?\];/, nouveauBloc);
+
+    // Vide le localStorage dans la version générée pour repartir proprement
+    source = source.replace(
+        /\/\/ --- 🚀 INITIALISATION ---/,
+        "// localStorage pré-chargé\ntry { localStorage.removeItem('menuNeuils_platsBase'); } catch(e) {}\n// --- 🚀 INITIALISATION ---"
+    );
+
+    const blob = new Blob([source], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "index.html";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert(`✅ index.html téléchargé avec ${nb} plats gravés dedans.\n\nRemplace le fichier sur GitHub pour le rendre permanent !`);
+}
+
+// Sauvegarde automatique : à chaque modif de la base, on écrit un fichier
+// de sauvegarde JSON. Si un dossier a été choisi (File System Access API,
+// ex. dossier OneDrive), on écrit directement dedans (écrasé à chaque fois).
+// Sinon, on déclenche un téléchargement classique.
+let dossierSauvegardeHandle = null;
+const NOM_FICHIER_BACKUP = "base-plats-neuils-backup.json";
+
+const DB_NAME = "menuNeuilsDB";
+const STORE_NAME = "handles";
+
+function ouvrirDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = () => req.result.createObjectStore(STORE_NAME);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function sauvegarderHandleDossier(handle) {
+    const db = await ouvrirDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).put(handle, "dossierSauvegarde");
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+    });
+}
+
+async function chargerHandleDossier() {
+    try {
+        const db = await ouvrirDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(STORE_NAME, "readonly");
+            const req = tx.objectStore(STORE_NAME).get("dossierSauvegarde");
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => resolve(null);
+        });
+    } catch (e) {
+        return null;
+    }
+}
+
+async function choisirDossierSauvegarde() {
+    if (!window.showDirectoryPicker) {
+        alert("⚠️ Ton navigateur ne supporte pas cette fonctionnalité. Utilise Chrome ou Edge sur PC.\nLes sauvegardes continueront à être téléchargées normalement.");
+        return;
+    }
+    try {
+        const handle = await window.showDirectoryPicker({ mode: "readwrite" });
+        await sauvegarderHandleDossier(handle);
+        dossierSauvegardeHandle = handle;
+        majStatutDossier();
+        await sauvegardeAuto();
+        alert("✅ Dossier configuré ! Les sauvegardes futures iront directement dans : " + handle.name);
+    } catch (e) {
+        // L'utilisateur a annulé
+    }
+}
+
+function majStatutDossier() {
+    const el = document.getElementById("statut-dossier");
+    if (!el) return;
+    if (dossierSauvegardeHandle) {
+        el.innerText = "📁 Dossier de sauvegarde configuré : " + dossierSauvegardeHandle.name;
+        el.style.color = "#27ae60";
+    } else if (!window.showDirectoryPicker) {
+        el.innerText = "ℹ️ Sauvegarde par téléchargement (dossier direct non supporté par ce navigateur)";
+        el.style.color = "#94a3b8";
+    } else {
+        el.innerText = "ℹ️ Aucun dossier configuré — sauvegarde par téléchargement";
+        el.style.color = "#94a3b8";
+    }
+}
+
+async function initDossierSauvegarde() {
+    if (!window.showDirectoryPicker) { majStatutDossier(); return; }
+    const handle = await chargerHandleDossier();
+    if (!handle) { majStatutDossier(); return; }
+    try {
+        const permission = await handle.queryPermission({ mode: "readwrite" });
+        if (permission === "granted") {
+            dossierSauvegardeHandle = handle;
+        }
+    } catch (e) {}
+    majStatutDossier();
+}
+
+async function ecrireDansDossier(handle, nomFichier, contenu) {
+    const fileHandle = await handle.getFileHandle(nomFichier, { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(contenu);
+    await writable.close();
+}
+
+async function sauvegardeAuto() {
+    const contenu = JSON.stringify(getPlatsBase(), null, 4);
+
+    if (dossierSauvegardeHandle) {
+        try {
+            const permission = await dossierSauvegardeHandle.queryPermission({ mode: "readwrite" });
+            if (permission === "granted" || (await dossierSauvegardeHandle.requestPermission({ mode: "readwrite" })) === "granted") {
+                await ecrireDansDossier(dossierSauvegardeHandle, NOM_FICHIER_BACKUP, contenu);
+                return;
+            }
+        } catch (e) {
+            console.warn("Écriture dans le dossier impossible, retour au téléchargement", e);
+        }
+    }
+
+    telechargerJSON(contenu, NOM_FICHIER_BACKUP);
+}
+
+
+function importerBase(event) {
+    const fichier = event.target.files[0];
+    if (!fichier) return;
+
+    const lecteur = new FileReader();
+    lecteur.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!Array.isArray(data)) throw new Error("Le fichier doit contenir une liste");
+
+            const valide = data.every(p => typeof p.nom === "string" && ["ete", "hiver", "toutes"].includes(p.saison));
+            if (!valide) throw new Error("Chaque plat doit avoir 'nom' et 'saison' (ete/hiver/toutes)");
+
+            setPlatsBase(data);
+            majCompteurs();
+            genererCarousel();
+            afficherListePlats();
+            alert("✅ Base importée avec succès : " + data.length + " plats.");
+        } catch (err) {
+            alert("❌ Fichier invalide : " + err.message);
+        }
+        event.target.value = "";
+    };
+    lecteur.readAsText(fichier);
+}
+
+function reinitialiserBase() {
+    if (confirm("Cela va remplacer ta base actuelle par la base d'origine (" + PLATS_DEFAUT.length + " plats). Continuer ?")) {
+        setPlatsBase(JSON.parse(JSON.stringify(PLATS_DEFAUT)));
+        majCompteurs();
+        genererCarousel();
+        afficherListePlats();
+    }
+}
+
+// --- 👀 VOIR / GÉRER LA LISTE DES PLATS ---
+function toggleListePlats() {
+    const conteneur = document.getElementById("liste-plats-container");
+    const bouton = document.getElementById("btn-toggle-liste");
+    if (conteneur.style.display === "none") {
+        conteneur.style.display = "block";
+        bouton.innerText = "🙈 Masquer la liste des plats";
+        afficherListePlats();
+    } else {
+        conteneur.style.display = "none";
+        bouton.innerText = "👀 Voir / gérer la liste des plats";
+    }
+}
+
+function afficherListePlats() {
+    const conteneur = document.getElementById("liste-plats-container");
+    if (!conteneur || conteneur.style.display === "none") return;
+
+    const filtreEl = document.getElementById("filtre-plats");
+    const filtre = filtreEl ? filtreEl.value.trim().toLowerCase() : "";
+
+    const base = getPlatsBase();
+    const labels = { ete: "☀️ Été", hiver: "❄️ Hiver", toutes: "🌍 Toutes" };
+
+    let html = `<table class="table-plats"><thead><tr><th>Plat</th><th class="col-saison">Saison</th><th class="col-action">🗑️</th></tr></thead><tbody>`;
+    base.forEach((plat, index) => {
+        if (filtre && !plat.nom.toLowerCase().includes(filtre)) return;
+        html += `<tr>
+            <td><input type="text" class="edit-nom" value="${plat.nom.replace(/"/g, '&quot;')}" onchange="modifierNomPlat(${index}, this.value)"></td>
+            <td class="col-saison">
+                <select class="edit-saison" onchange="modifierSaisonPlat(${index}, this.value)">
+                    <option value="ete" ${plat.saison === "ete" ? "selected" : ""}>☀️ Été</option>
+                    <option value="hiver" ${plat.saison === "hiver" ? "selected" : ""}>❄️ Hiver</option>
+                    <option value="toutes" ${plat.saison === "toutes" ? "selected" : ""}>🌍 Toutes</option>
+                </select>
+            </td>
+            <td class="col-action"><button class="btn-suppr" title="Supprimer" onclick="supprimerPlat(${index})">🗑️</button></td>
+        </tr>`;
+    });
+    html += `</tbody></table>`;
+
+    if (base.length === 0) html = "<p>Aucun plat dans la base.</p>";
+
+    document.getElementById("liste-plats-table").innerHTML = html;
+}
+
+function modifierNomPlat(index, valeur) {
+    const base = getPlatsBase();
+    if (!base[index]) return;
+    base[index].nom = valeur.trim();
+    setPlatsBase(base);
+    genererCarousel();
+    sauvegardeAuto();
+}
+
+function modifierSaisonPlat(index, valeur) {
+    const base = getPlatsBase();
+    if (!base[index]) return;
+    base[index].saison = valeur;
+    setPlatsBase(base);
+    sauvegardeAuto();
+}
+
+function supprimerPlat(index) {
+    const base = getPlatsBase();
+    if (!base[index]) return;
+    if (!confirm("Supprimer \"" + base[index].nom + "\" de la base ?")) return;
+    base.splice(index, 1);
+    setPlatsBase(base);
+    majCompteurs();
+    genererCarousel();
+    afficherListePlats();
+    sauvegardeAuto();
+}
+
+
+// --- 🎠 CARROUSEL D'IDÉES ---
+function genererCarousel() {
+    const noms = melanger(getPlatsBase().map(p => p.nom));
+    document.getElementById("carousel-track").innerHTML = noms.concat(noms).map(i => `<div class="suggestion-item" draggable="true">${i}</div>`).join('');
+    activerDragAndDrop();
+    activerScrollCarousel();
+}
+
+// Permet de faire défiler la "Boîte à idées" à la souris (molette ou glisser)
+function activerScrollCarousel() {
+    const track = document.getElementById("carousel-track");
+    if (!track || track.dataset.scrollInit) return;
+    track.dataset.scrollInit = "1";
+
+    // Molette de la souris -> défilement horizontal + pause de l'animation
+    track.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        track.classList.add("paused");
+        track.scrollLeft += e.deltaY !== 0 ? e.deltaY : e.deltaX;
+    }, { passive: false });
+
+    // Glisser-déposer à la souris pour faire défiler
+    let enTrain = false, departX = 0, scrollDepart = 0;
+    track.addEventListener("mousedown", (e) => {
+        if (e.target.closest('.suggestion-item') && e.target.draggable) return; // laisser le drag&drop des plats fonctionner
+        enTrain = true;
+        track.classList.add("paused", "dragging");
+        departX = e.pageX;
+        scrollDepart = track.scrollLeft;
+    });
+    window.addEventListener("mouseup", () => {
+        if (enTrain) { enTrain = false; track.classList.remove("dragging"); }
+    });
+    window.addEventListener("mousemove", (e) => {
+        if (!enTrain) return;
+        track.scrollLeft = scrollDepart - (e.pageX - departX);
+    });
+
+    // Pause au survol, reprise quand la souris quitte la zone
+    track.addEventListener("mouseenter", () => track.classList.add("paused"));
+    track.addEventListener("mouseleave", () => { if (!enTrain) track.classList.remove("paused"); });
+}
+
+// --- 🖱️ DRAG & DROP ---
+function activerDragAndDrop() {
+    const cells = document.querySelectorAll('.meal-cell');
+    const items = document.querySelectorAll('.suggestion-item');
+
+    cells.forEach(cell => {
+        cell.ondragover = (e) => { e.preventDefault(); cell.classList.add('drag-over'); };
+        cell.ondragleave = () => cell.classList.remove('drag-over');
+        cell.ondragstart = () => { elementAttrape = cell; };
+        cell.ondrop = (e) => {
+            cell.classList.remove('drag-over');
+            if (!elementAttrape) return;
+
+            let cible = e.target.closest('.lunchbox-meal') || cell.querySelector('.meal-content');
+
+            if (elementAttrape.classList.contains('suggestion-item')) {
+                let old = cible.innerText.trim();
+                cible.innerText = elementAttrape.innerText.trim();
+                elementAttrape.innerText = old;
+            } else {
+                let contenuAttrape = elementAttrape.querySelector('.meal-content');
+                let tmp = cible.innerText.trim();
+                cible.innerText = contenuAttrape.innerText.trim();
+                contenuAttrape.innerText = tmp;
+            }
+        };
+    });
+    items.forEach(item => { item.ondragstart = () => { elementAttrape = item; }; });
+}
+
+// --- 🎲 SUGGESTIONS DE PLATS (catalogue local de 240+ idées) ---
+const SUGGESTIONS_CATALOGUE = [
+    {
+        "nom": "salade niçoise",
+        "saison": "ete"
+    },
+    {
+        "nom": "wrap poulet avocat",
+        "saison": "ete"
+    },
+    {
+        "nom": "bruschetta tomates basilic",
+        "saison": "ete"
+    },
+    {
+        "nom": "gazpacho andalou",
+        "saison": "ete"
+    },
+    {
+        "nom": "melon jambon cru",
+        "saison": "ete"
+    },
+    {
+        "nom": "burrata tomates cerises",
+        "saison": "ete"
+    },
+    {
+        "nom": "penne courgettes ricotta",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade pastèque feta menthe",
+        "saison": "ete"
+    },
+    {
+        "nom": "tartare de saumon avocat",
+        "saison": "ete"
+    },
+    {
+        "nom": "ceviche de dorade",
+        "saison": "ete"
+    },
+    {
+        "nom": "brochettes de légumes grillés semoule",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade landaise",
+        "saison": "ete"
+    },
+    {
+        "nom": "pissaladière",
+        "saison": "ete"
+    },
+    {
+        "nom": "tian de légumes",
+        "saison": "ete"
+    },
+    {
+        "nom": "noodles froids au sésame",
+        "saison": "ete"
+    },
+    {
+        "nom": "buddha bowl poulet",
+        "saison": "ete"
+    },
+    {
+        "nom": "poké bowl saumon",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de quinoa grillé",
+        "saison": "ete"
+    },
+    {
+        "nom": "taboulé libanais",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade grecque",
+        "saison": "ete"
+    },
+    {
+        "nom": "caprese mozzarella",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de poulpe",
+        "saison": "ete"
+    },
+    {
+        "nom": "gaspacho de betterave",
+        "saison": "ete"
+    },
+    {
+        "nom": "velouté glacé de petits pois",
+        "saison": "ete"
+    },
+    {
+        "nom": "sardines grillées salade",
+        "saison": "ete"
+    },
+    {
+        "nom": "maquereaux à la plancha",
+        "saison": "ete"
+    },
+    {
+        "nom": "tomates farcies au thon",
+        "saison": "ete"
+    },
+    {
+        "nom": "aubergines à la parmesane",
+        "saison": "ete"
+    },
+    {
+        "nom": "ratatouille œuf poché",
+        "saison": "ete"
+    },
+    {
+        "nom": "courgettes farcies riz",
+        "saison": "ete"
+    },
+    {
+        "nom": "poivrons farcis féta",
+        "saison": "ete"
+    },
+    {
+        "nom": "brochettes de poulet mariné",
+        "saison": "ete"
+    },
+    {
+        "nom": "souvlaki grec",
+        "saison": "ete"
+    },
+    {
+        "nom": "gambas grillées ail",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de lentilles vinaigrette",
+        "saison": "ete"
+    },
+    {
+        "nom": "carpaccio de bœuf roquette",
+        "saison": "ete"
+    },
+    {
+        "nom": "vitello tonnato",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de pâtes pesto",
+        "saison": "ete"
+    },
+    {
+        "nom": "panzanella toscane",
+        "saison": "ete"
+    },
+    {
+        "nom": "fattoush libanais",
+        "saison": "ete"
+    },
+    {
+        "nom": "rouleaux de printemps",
+        "saison": "ete"
+    },
+    {
+        "nom": "bo bun vietnamien",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade thaï bœuf",
+        "saison": "ete"
+    },
+    {
+        "nom": "poulet teriyaki riz froid",
+        "saison": "ete"
+    },
+    {
+        "nom": "wrap falafel houmous",
+        "saison": "ete"
+    },
+    {
+        "nom": "pan bagnat niçois",
+        "saison": "ete"
+    },
+    {
+        "nom": "club sandwich",
+        "saison": "ete"
+    },
+    {
+        "nom": "croque-monsieur salade",
+        "saison": "ete"
+    },
+    {
+        "nom": "quiche courgettes chèvre",
+        "saison": "ete"
+    },
+    {
+        "nom": "tarte fine tomates moutarde",
+        "saison": "ete"
+    },
+    {
+        "nom": "focaccia légumes",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de riz colorée",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de boulgour grenade",
+        "saison": "ete"
+    },
+    {
+        "nom": "houmous betterave crudités",
+        "saison": "ete"
+    },
+    {
+        "nom": "caponata sicilienne",
+        "saison": "ete"
+    },
+    {
+        "nom": "flammekueche légumes",
+        "saison": "ete"
+    },
+    {
+        "nom": "sardines marinées citron",
+        "saison": "ete"
+    },
+    {
+        "nom": "brandade nîmoise",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de fenouil orange",
+        "saison": "ete"
+    },
+    {
+        "nom": "carottes rapées cumin",
+        "saison": "ete"
+    },
+    {
+        "nom": "concombre tzatziki",
+        "saison": "ete"
+    },
+    {
+        "nom": "émincé de poulet basquaise",
+        "saison": "ete"
+    },
+    {
+        "nom": "brochette halloumi légumes",
+        "saison": "ete"
+    },
+    {
+        "nom": "sauté de gambas courgettes",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade de chèvre chaud miel",
+        "saison": "ete"
+    },
+    {
+        "nom": "melon prosciutto",
+        "saison": "ete"
+    },
+    {
+        "nom": "pastèque grillée féta",
+        "saison": "ete"
+    },
+    {
+        "nom": "poke bowl thon mangue",
+        "saison": "ete"
+    },
+    {
+        "nom": "salade vietnamienne crevettes",
+        "saison": "ete"
+    },
+    {
+        "nom": "soupe à l'oignon gratinée",
+        "saison": "hiver"
+    },
+    {
+        "nom": "velouté de céleri rave",
+        "saison": "hiver"
+    },
+    {
+        "nom": "minestrone",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de lentilles corail",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tartiflette",
+        "saison": "hiver"
+    },
+    {
+        "nom": "raclette savoyarde",
+        "saison": "hiver"
+    },
+    {
+        "nom": "fondue savoyarde",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de crozets jambon",
+        "saison": "hiver"
+    },
+    {
+        "nom": "poulet au vin blanc champignons",
+        "saison": "hiver"
+    },
+    {
+        "nom": "lapin à la moutarde",
+        "saison": "hiver"
+    },
+    {
+        "nom": "joue de bœuf bourguignon",
+        "saison": "hiver"
+    },
+    {
+        "nom": "rôti de porc flageolets",
+        "saison": "hiver"
+    },
+    {
+        "nom": "saucisses lentilles",
+        "saison": "hiver"
+    },
+    {
+        "nom": "chou farci",
+        "saison": "hiver"
+    },
+    {
+        "nom": "potée auvergnate",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de butternut chèvre",
+        "saison": "hiver"
+    },
+    {
+        "nom": "salade chou rouge noix",
+        "saison": "hiver"
+    },
+    {
+        "nom": "poireaux vinaigrette œuf dur",
+        "saison": "hiver"
+    },
+    {
+        "nom": "ravioles crème épinards",
+        "saison": "hiver"
+    },
+    {
+        "nom": "penne gorgonzola noix",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tarte tatin oignon chèvre",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe potimarron châtaigne",
+        "saison": "hiver"
+    },
+    {
+        "nom": "velouté panais",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin dauphinois",
+        "saison": "hiver"
+    },
+    {
+        "nom": "hachis parmentier",
+        "saison": "hiver"
+    },
+    {
+        "nom": "blanquette de veau",
+        "saison": "hiver"
+    },
+    {
+        "nom": "bœuf carottes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "pot-au-feu",
+        "saison": "hiver"
+    },
+    {
+        "nom": "cassoulet toulousain",
+        "saison": "hiver"
+    },
+    {
+        "nom": "choucroute garnie",
+        "saison": "hiver"
+    },
+    {
+        "nom": "daube provençale",
+        "saison": "hiver"
+    },
+    {
+        "nom": "navarin d'agneau",
+        "saison": "hiver"
+    },
+    {
+        "nom": "coq au vin",
+        "saison": "hiver"
+    },
+    {
+        "nom": "cuisses de canard confites",
+        "saison": "hiver"
+    },
+    {
+        "nom": "magret de canard miel",
+        "saison": "hiver"
+    },
+    {
+        "nom": "endives au jambon gratinées",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de chou-fleur",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de pâtes jambon",
+        "saison": "hiver"
+    },
+    {
+        "nom": "croziflette",
+        "saison": "hiver"
+    },
+    {
+        "nom": "aligot saucisse",
+        "saison": "hiver"
+    },
+    {
+        "nom": "polenta crémeuse champignons",
+        "saison": "hiver"
+    },
+    {
+        "nom": "risotto potiron",
+        "saison": "hiver"
+    },
+    {
+        "nom": "risotto champignons",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de poireaux pommes de terre",
+        "saison": "hiver"
+    },
+    {
+        "nom": "velouté de courge",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de blettes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "parmentier de canard",
+        "saison": "hiver"
+    },
+    {
+        "nom": "saucisse purée maison",
+        "saison": "hiver"
+    },
+    {
+        "nom": "boudin noir pommes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "côtes de porc lentilles",
+        "saison": "hiver"
+    },
+    {
+        "nom": "chili con carne",
+        "saison": "hiver"
+    },
+    {
+        "nom": "goulash hongrois",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tajine agneau pruneaux",
+        "saison": "hiver"
+    },
+    {
+        "nom": "couscous royal",
+        "saison": "hiver"
+    },
+    {
+        "nom": "curry de bœuf",
+        "saison": "hiver"
+    },
+    {
+        "nom": "dahl de lentilles",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe miso tofu",
+        "saison": "hiver"
+    },
+    {
+        "nom": "ramen porc",
+        "saison": "hiver"
+    },
+    {
+        "nom": "pho vietnamien",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de macaronis béchamel",
+        "saison": "hiver"
+    },
+    {
+        "nom": "épinards à la crème œuf",
+        "saison": "hiver"
+    },
+    {
+        "nom": "quiche lorraine",
+        "saison": "hiver"
+    },
+    {
+        "nom": "tarte poireaux chèvre",
+        "saison": "hiver"
+    },
+    {
+        "nom": "clafoutis salé légumes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "oeufs cocotte épinards",
+        "saison": "hiver"
+    },
+    {
+        "nom": "soupe de poisson rouille",
+        "saison": "hiver"
+    },
+    {
+        "nom": "moules marinières frites",
+        "saison": "hiver"
+    },
+    {
+        "nom": "cabillaud sauce vierge",
+        "saison": "hiver"
+    },
+    {
+        "nom": "brandade de morue gratinée",
+        "saison": "hiver"
+    },
+    {
+        "nom": "fish and chips maison",
+        "saison": "hiver"
+    },
+    {
+        "nom": "velouté de cèpes",
+        "saison": "hiver"
+    },
+    {
+        "nom": "gratin de courge butternut",
+        "saison": "hiver"
+    },
+    {
+        "nom": "feuilleté de saumon épinards",
+        "saison": "hiver"
+    },
+    {
+        "nom": "parmentier de poisson",
+        "saison": "hiver"
+    },
+    {
+        "nom": "pâtes au saumon fumé",
+        "saison": "hiver"
+    },
+    {
+        "nom": "club sandwich maison",
+        "saison": "toutes"
+    },
+    {
+        "nom": "quesadillas poulet fromage",
+        "saison": "toutes"
+    },
+    {
+        "nom": "shakshuka",
+        "saison": "toutes"
+    },
+    {
+        "nom": "riz cantonnais",
+        "saison": "toutes"
+    },
+    {
+        "nom": "soupe miso nouilles",
+        "saison": "toutes"
+    },
+    {
+        "nom": "gratin de quinoa légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "curry de pois chiches",
+        "saison": "toutes"
+    },
+    {
+        "nom": "dal de lentilles riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "falafel taboulé",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tartine avocat œuf poché",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tagliatelles citron saumon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "boulettes de viande sauce tomate",
+        "saison": "toutes"
+    },
+    {
+        "nom": "porc effiloché pain burger",
+        "saison": "toutes"
+    },
+    {
+        "nom": "moussaka grecque",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pastilla poulet amandes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "gyozas riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "spring rolls maison",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pad thaï",
+        "saison": "toutes"
+    },
+    {
+        "nom": "nasi goreng",
+        "saison": "toutes"
+    },
+    {
+        "nom": "bibimbap coréen",
+        "saison": "toutes"
+    },
+    {
+        "nom": "butter chicken riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "curry vert thaï",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet tikka massala",
+        "saison": "toutes"
+    },
+    {
+        "nom": "biryani légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "chow mein poulet",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tacos mexicains",
+        "saison": "toutes"
+    },
+    {
+        "nom": "fajitas poulet poivrons",
+        "saison": "toutes"
+    },
+    {
+        "nom": "enchiladas haricots",
+        "saison": "toutes"
+    },
+    {
+        "nom": "burritos bœuf",
+        "saison": "toutes"
+    },
+    {
+        "nom": "nachos gratinés",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pizza margherita",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pizza reine",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pizza chèvre miel",
+        "saison": "toutes"
+    },
+    {
+        "nom": "calzone jambon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "lasagnes bolognaise",
+        "saison": "toutes"
+    },
+    {
+        "nom": "lasagnes saumon épinards",
+        "saison": "toutes"
+    },
+    {
+        "nom": "cannelloni ricotta",
+        "saison": "toutes"
+    },
+    {
+        "nom": "gnocchis sauce tomate",
+        "saison": "toutes"
+    },
+    {
+        "nom": "gnocchis poêlés sauge",
+        "saison": "toutes"
+    },
+    {
+        "nom": "spaghetti carbonara",
+        "saison": "toutes"
+    },
+    {
+        "nom": "spaghetti bolognaise",
+        "saison": "toutes"
+    },
+    {
+        "nom": "penne arrabbiata",
+        "saison": "toutes"
+    },
+    {
+        "nom": "macaronis au fromage",
+        "saison": "toutes"
+    },
+    {
+        "nom": "one pot pasta tomate",
+        "saison": "toutes"
+    },
+    {
+        "nom": "pâtes au pesto",
+        "saison": "toutes"
+    },
+    {
+        "nom": "risotto parmesan",
+        "saison": "toutes"
+    },
+    {
+        "nom": "paella valencienne",
+        "saison": "toutes"
+    },
+    {
+        "nom": "riz pilaf légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "wok de nouilles légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "wok de bœuf",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet rôti pommes de terre",
+        "saison": "toutes"
+    },
+    {
+        "nom": "escalope milanaise",
+        "saison": "toutes"
+    },
+    {
+        "nom": "cordon bleu maison",
+        "saison": "toutes"
+    },
+    {
+        "nom": "nuggets maison frites",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poisson pané purée",
+        "saison": "toutes"
+    },
+    {
+        "nom": "omelette aux champignons",
+        "saison": "toutes"
+    },
+    {
+        "nom": "omelette espagnole",
+        "saison": "toutes"
+    },
+    {
+        "nom": "frittata légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "croque-madame",
+        "saison": "toutes"
+    },
+    {
+        "nom": "welsh complet",
+        "saison": "toutes"
+    },
+    {
+        "nom": "galettes bretonnes complètes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "crêpes salées jambon fromage",
+        "saison": "toutes"
+    },
+    {
+        "nom": "quiche thon tomate",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tarte aux légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "cake salé olives jambon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "burger maison frites",
+        "saison": "toutes"
+    },
+    {
+        "nom": "cheeseburger bacon",
+        "saison": "toutes"
+    },
+    {
+        "nom": "hot-dogs maison",
+        "saison": "toutes"
+    },
+    {
+        "nom": "kebab maison",
+        "saison": "toutes"
+    },
+    {
+        "nom": "sandwich poulet crudités",
+        "saison": "toutes"
+    },
+    {
+        "nom": "brochettes de poulet riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "brochettes de bœuf légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "keftas boulettes semoule",
+        "saison": "toutes"
+    },
+    {
+        "nom": "chili sin carne",
+        "saison": "toutes"
+    },
+    {
+        "nom": "curry de légumes riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poêlée de légumes œufs",
+        "saison": "toutes"
+    },
+    {
+        "nom": "gratin de légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "parmentier végétarien",
+        "saison": "toutes"
+    },
+    {
+        "nom": "steak végétal salade",
+        "saison": "toutes"
+    },
+    {
+        "nom": "galettes de légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "soupe de tomate basilic",
+        "saison": "toutes"
+    },
+    {
+        "nom": "velouté de carotte coco",
+        "saison": "toutes"
+    },
+    {
+        "nom": "crème de champignons",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet curry coco",
+        "saison": "toutes"
+    },
+    {
+        "nom": "émincé de dinde crème",
+        "saison": "toutes"
+    },
+    {
+        "nom": "sauté de porc caramel",
+        "saison": "toutes"
+    },
+    {
+        "nom": "travers de porc bbq",
+        "saison": "toutes"
+    },
+    {
+        "nom": "poulet yassa",
+        "saison": "toutes"
+    },
+    {
+        "nom": "mafé poulet",
+        "saison": "toutes"
+    },
+    {
+        "nom": "colombo de poulet",
+        "saison": "toutes"
+    },
+    {
+        "nom": "saumon teriyaki riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "cabillaud citron riz",
+        "saison": "toutes"
+    },
+    {
+        "nom": "filet de poisson beurre blanc",
+        "saison": "toutes"
+    },
+    {
+        "nom": "papillote de poisson légumes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "crevettes ail persil",
+        "saison": "toutes"
+    },
+    {
+        "nom": "risotto crevettes",
+        "saison": "toutes"
+    },
+    {
+        "nom": "tagliatelles fruits de mer",
+        "saison": "toutes"
+    },
+    {
+        "nom": "moules frites",
+        "saison": "toutes"
+    },
+    {
+        "nom": "calamars à la romaine",
+        "saison": "toutes"
+    },
+    {
+        "nom": "brandade de morue",
+        "saison": "toutes"
+    }
+];
+
+function genererSuggestions() {
+    const saison = document.getElementById("saison-choisie").value || "toutes";
+
+    // Filtre par saison sélectionnée (+ les plats "toutes saisons") et exclut ceux déjà dans la base
+    const baseActuelle = getPlatsBase().map(p => normaliser(p.nom));
+    const disponibles = SUGGESTIONS_CATALOGUE.filter(s => {
+        if (s.saison !== saison && s.saison !== "toutes") return false;
+        const sNorm = normaliser(s.nom);
+        return !baseActuelle.some(b => b === sNorm || (b.length > 8 && sNorm.includes(b)) || (sNorm.length > 8 && b.includes(sNorm)));
+    });
+
+    if (disponibles.length === 0) {
+        alert("Tu as déjà tous les plats du catalogue pour cette saison ! Change de saison ou ajoute tes propres idées.");
+        return;
+    }
+
+    // Mélange et prend jusqu'à 20 suggestions aléatoires
+    const nouvelles = melanger(disponibles).slice(0, 20);
+
+    const etiquettes = { ete: "☀️ Été", hiver: "❄️ Hiver", toutes: "🌍 Toutes" };
+    const classes = { ete: "bs-ete", hiver: "bs-hiver", toutes: "bs-toutes" };
+
+    const html = `<div class="suggestion-check-grid">` +
+        nouvelles.map((s, i) =>
+            `<div class="suggestion-check-item">
+                <input type="checkbox" id="sug-${i}" value="${i}" checked>
+                <label for="sug-${i}">${s.nom} <span class="badge-saison-s ${classes[s.saison]}">${etiquettes[s.saison]}</span></label>
+            </div>`
+        ).join("") + `</div>`;
+
+    document.getElementById("suggestions-liste").innerHTML = html;
+    document.getElementById("suggestions-liste").dataset.items = JSON.stringify(nouvelles);
+    document.getElementById("suggestions-container").style.display = "block";
+    document.getElementById("suggestions-container").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function validerSuggestions() {
+    const items = JSON.parse(document.getElementById("suggestions-liste").dataset.items || "[]");
+    const coches = [...document.querySelectorAll('#suggestions-liste input[type="checkbox"]:checked')];
+    if (coches.length === 0) { alert("Aucun plat coché !"); return; }
+
+    const base = getPlatsBase();
+    coches.forEach(cb => {
+        const idx = parseInt(cb.value);
+        base.push(items[idx]);
+    });
+    setPlatsBase(base);
+    majCompteurs();
+    genererCarousel();
+    afficherListePlats();
+    sauvegardeAuto();
+
+    document.getElementById("suggestions-container").style.display = "none";
+    alert(`✅ ${coches.length} plat(s) ajouté(s) à la base !`);
+}
+
+// --- 🚀 INITIALISATION ---
+document.addEventListener("DOMContentLoaded", () => {
+    majCompteurs();
+    initDossierSauvegarde();
+});
+</script>
+</body>
+</html>
